@@ -1,7 +1,8 @@
-from crewai import Agent, Crew, Process, Task
+from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
+
 
 
 #define the class for our crew
@@ -14,17 +15,22 @@ class ResearchAndBlogCrew():
     agents_config= "config/agents.yaml"
     tasks_config= "config/tasks.yaml"
 
+    def __init__(self):
+        self.groq_llm = LLM(model="groq/llama-3.1-8b-instant")
+
     #==============Agents==============
     @agent
     def report_generator(self) -> Agent:
         return Agent(
-            config=self.agents_config["report_generator"]
+            config=self.agents_config["report_generator"],
+            llm=self.groq_llm
         )
     
     @agent
     def blog_writer(self) -> Agent:
         return Agent(
-            config=self.agents_config["blog_writer"]
+            config=self.agents_config["blog_writer"],
+            llm=self.groq_llm
         )
     
     #============tasks================
